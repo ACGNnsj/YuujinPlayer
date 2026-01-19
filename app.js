@@ -218,7 +218,7 @@ const messages = {
         backgroundMode: '背景模式',
         defaultBackground: '預設背景',
         visualizerBackground: '音樂視覺化'
-      },
+    },
     ko_KP: {
         musicPlayer: '음악 재생기',
         library: '음악 도서관',
@@ -293,16 +293,16 @@ new Vue({
         isMidiTrack: false,
         midiPlayer: null,
         equalizerBands: [
-            { frequency: 32, gain: 0 },
-            { frequency: 64, gain: 0 },
-            { frequency: 125, gain: 0 },
-            { frequency: 250, gain: 0 },
-            { frequency: 500, gain: 0 },
-            { frequency: 1000, gain: 0 },
-            { frequency: 2000, gain: 0 },
-            { frequency: 4000, gain: 0 },
-            { frequency: 8000, gain: 0 },
-            { frequency: 16000, gain: 0 }
+            {frequency: 32, gain: 0},
+            {frequency: 64, gain: 0},
+            {frequency: 125, gain: 0},
+            {frequency: 250, gain: 0},
+            {frequency: 500, gain: 0},
+            {frequency: 1000, gain: 0},
+            {frequency: 2000, gain: 0},
+            {frequency: 4000, gain: 0},
+            {frequency: 8000, gain: 0},
+            {frequency: 16000, gain: 0}
         ],
         audioContext: null,
         equalizer: null,
@@ -321,8 +321,8 @@ new Vue({
     },
     computed: {
         currentTrack() {
-            return this.playlist[this.currentTrackIndex] || { 
-                title: this.$t('musicPlayer'), 
+            return this.playlist[this.currentTrackIndex] || {
+                title: this.$t('musicPlayer'),
                 artist: '',
                 album: '',
                 coverArt: 'https://via.placeholder.com/300'
@@ -336,16 +336,16 @@ new Vue({
         },
         currentLyric() {
             if (this.lyrics.length > 0 && this.activeLyricIndex >= 0) {
-              return this.lyrics[this.activeLyricIndex].parts.map(part => part.text).join('');
+                return this.lyrics[this.activeLyricIndex].parts.map(part => part.text).join('');
             }
             return '';
-          },
+        },
     },
     watch: {
         '$i18n.locale': function (newLocale) {
             console.log('Language changed to: ' + newLocale);
         },
-        currentTrackIndex: function() {
+        currentTrackIndex: function () {
             this.updateWaveform();
         },
         isDarkMode: {
@@ -363,10 +363,10 @@ new Vue({
             },
             immediate: true
         },
-        volume: function(newVolume) {
+        volume: function (newVolume) {
             this.audio.volume = newVolume / 100;
         },
-        backgroundMode: function(newMode) {
+        backgroundMode: function (newMode) {
             if (newMode === 2 && this.isPlaying) {
                 this.setupBarVisualizer();
             } else {
@@ -429,7 +429,7 @@ new Vue({
                         this.midiPlayer.stop();
                     }
                     this.audio.src = URL.createObjectURL(track.file);
-                    
+
                     try {
                         await new Promise((resolve, reject) => {
                             this.audio.oncanplaythrough = resolve;
@@ -451,7 +451,7 @@ new Vue({
                 this.setView('nowPlaying');
                 this.updateWaveform();
                 this.updateFeatherIcons();
-                
+
                 // Setup bar visualizer if in that mode
                 if (this.backgroundMode === 2 && this.isPlaying) {
                     this.setupBarVisualizer();
@@ -561,7 +561,7 @@ new Vue({
         getAudioTags(file) {
             return new Promise((resolve, reject) => {
                 jsmediatags.read(file, {
-                    onSuccess: function(tag) {
+                    onSuccess: function (tag) {
                         resolve({
                             title: tag.tags.title,
                             artist: tag.tags.artist,
@@ -569,7 +569,7 @@ new Vue({
                             picture: tag.tags.picture
                         });
                     },
-                    onError: function(error) {
+                    onError: function (error) {
                         reject(error);
                     }
                 });
@@ -628,7 +628,7 @@ new Vue({
                         const text = line.replace(timeRegex, '').trim();
                         const parts = this.parseHarmony(text);
                         const isRightAligned = alignment === '/r';
-                        return { time, parts, isRightAligned };
+                        return {time, parts, isRightAligned};
                     }
                     return null;
                 })
@@ -643,12 +643,12 @@ new Vue({
             for (let i = 0; i < text.length; i++) {
                 if (text[i] === '(') {
                     if (currentPart) {
-                        parts.push({ text: currentPart, isHarmony: false });
+                        parts.push({text: currentPart, isHarmony: false});
                         currentPart = '';
                     }
                     isHarmony = true;
                 } else if (text[i] === ')') {
-                    parts.push({ text: currentPart, isHarmony: true });
+                    parts.push({text: currentPart, isHarmony: true});
                     currentPart = '';
                     isHarmony = false;
                 } else {
@@ -657,7 +657,7 @@ new Vue({
             }
 
             if (currentPart) {
-                parts.push({ text: currentPart, isHarmony: isHarmony });
+                parts.push({text: currentPart, isHarmony: isHarmony});
             }
 
             return parts;
@@ -683,15 +683,15 @@ new Vue({
         scrollToActiveLyric() {
             const container = this.$refs.lyricsContainer;
             const activeElement = this.$refs['lyricLine_' + this.activeLyricIndex][0];
-        
+
             if (container && activeElement) {
                 const containerHeight = container.clientHeight;
                 const elementTop = activeElement.offsetTop;
                 const elementHeight = activeElement.clientHeight;
-                
+
                 // Calculate the target scroll position, moving the active lyric to 20% from the top
                 const targetScrollPosition = elementTop - (containerHeight * 0.2) + (elementHeight / 2);
-        
+
                 // Use GSAP to create a faster scroll
                 gsap.to(container, {
                     duration: 0.55, // Reduced duration for faster scroll
@@ -701,17 +701,17 @@ new Vue({
                         // Ensure the lyrics content doesn't scroll beyond the container's boundaries
                         const lyricsContent = container.querySelector('.lyrics-content');
                         const maxScroll = lyricsContent.clientHeight - container.clientHeight;
-        
+
                         if (container.scrollTop > maxScroll) {
                             container.scrollTop = maxScroll;
                         }
-        
+
                         // Apply highlight and blur effects to lyric lines
                         const lyrics = container.querySelectorAll('.lyric-line');
                         lyrics.forEach((lyric, index) => {
                             const distance = Math.abs(lyric.offsetTop - elementTop);
                             const blurAmount = Math.min(distance / 150, 2);
-        
+
                             if (index === this.activeLyricIndex) {
                                 // Immediate highlight for active lyric (unchanged)
                                 gsap.to(lyric, {
@@ -721,10 +721,10 @@ new Vue({
                                     fontWeight: 'bold',
                                     ease: "none"
                                 });
-        
+
                             } else {
                                 // Smooth transition for non-active lyrics
-                                gsap.to(lyric, { 
+                                gsap.to(lyric, {
                                     duration: 0.1, // Reduced duration for faster transition
                                     color: 'rgba(255, 255, 255, 0.7)',
                                     textShadow: 'none',
@@ -732,7 +732,7 @@ new Vue({
                                     fontWeight: 'normal',
                                     ease: "power2.inOut"
                                 });
-        
+
                                 // Remove shadow from translation for non-active lyrics
                                 const translation = lyric.querySelector('.translation');
                                 if (translation) {
@@ -752,7 +752,7 @@ new Vue({
             if (this.waveform) {
                 this.waveform.destroy();
             }
-            
+
             if (this.isMidiTrack) {
                 const options = {
                     chart: {
@@ -793,10 +793,10 @@ new Vue({
                     },
                     colors: [this.isDarkMode ? '#0a84ff' : '#0071e3']
                 };
-                
+
                 this.waveform = new ApexCharts(document.querySelector("#waveform"), options);
                 this.waveform.render();
-                
+
                 const updateMidiVisualization = () => {
                     if (this.midiPlayer && this.midiPlayer.playback) {
                         const activeNotes = this.midiPlayer.playback.activeNotes;
@@ -812,22 +812,22 @@ new Vue({
                         requestAnimationFrame(updateMidiVisualization);
                     }
                 };
-                
+
                 updateMidiVisualization();
             } else {
                 if (!this.audioContext) {
                     this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
                 }
-                
+
                 const analyser = this.audioContext.createAnalyser();
                 const source = this.audioContext.createMediaElementSource(this.audio);
                 source.connect(analyser);
                 analyser.connect(this.audioContext.destination);
-                
+
                 analyser.fftSize = 256;
                 const bufferLength = this.extremePerformanceMode ? analyser.frequencyBinCount / 4 : (this.performanceMode ? analyser.frequencyBinCount / 2 : analyser.frequencyBinCount);
                 const dataArray = new Uint8Array(bufferLength);
-                
+
                 const options = {
                     chart: {
                         type: 'bar',
@@ -867,10 +867,10 @@ new Vue({
                     },
                     colors: [this.isDarkMode ? '#0a84ff' : '#0071e3']
                 };
-                
+
                 this.waveform = new ApexCharts(document.querySelector("#waveform"), options);
                 this.waveform.render();
-                
+
                 const updateWaveform = () => {
                     analyser.getByteFrequencyData(dataArray);
                     this.waveform.updateSeries([{
@@ -884,7 +884,7 @@ new Vue({
                         requestAnimationFrame(updateWaveform);
                     }
                 };
-                
+
                 updateWaveform();
             }
         },
@@ -976,17 +976,17 @@ new Vue({
         },
         async updateBackgroundFromAlbumArt(coverArtUrl) {
             this.backgroundImage = coverArtUrl;
-            
+
             const flowingAlbum1 = document.getElementById('flowingAlbum1');
             const flowingAlbum2 = document.getElementById('flowingAlbum2');
-            
+
             flowingAlbum1.style.backgroundImage = `url(${coverArtUrl})`;
             flowingAlbum2.style.backgroundImage = `url(${coverArtUrl})`;
-            
+
             flowingAlbum2.style.animationDelay = '10s';
-            
+
             this.updateOverlayColor();
-            
+
             // If we're in bar visualizer mode, set it up
             if (this.backgroundMode === 2 && this.isPlaying) {
                 this.setupBarVisualizer();
@@ -1005,7 +1005,7 @@ new Vue({
         },
         toggleLibraryLayout() {
             this.libraryLayout = this.libraryLayout === 'grid' ? 'list' : 'grid';
-          },
+        },
         selectLanguage(locale) {
             this.$i18n.locale = locale;
             this.isDropdownOpen = false;
@@ -1030,7 +1030,7 @@ new Vue({
                 } else {
                     document.body.classList.remove('extreme-performance-mode');
                 }
-                
+
                 const flowingAlbums = document.querySelectorAll('.flowing-album');
                 flowingAlbums.forEach(album => {
                     album.style.animation = 'none';
@@ -1053,7 +1053,7 @@ new Vue({
                 }
             } else {
                 document.body.classList.remove('performance-mode', 'extreme-performance-mode', 'disable-animations');
-                
+
                 const flowingAlbums = document.querySelectorAll('.flowing-album');
                 flowingAlbums.forEach(album => {
                     album.style.animation = '';
@@ -1114,7 +1114,7 @@ new Vue({
                 const newWidth = Math.max(Math.floor(img.dataset.originalWidth * scaleFactor), 16);
                 const newHeight = Math.max(Math.floor(img.dataset.originalHeight * scaleFactor), 16);
                 img.src = this.resizeImage(img, newWidth, newHeight);
-                
+
                 if (this.extremePerformanceMode) {
                     img.classList.add('extreme-low-res');
                 } else {
@@ -1138,7 +1138,7 @@ new Vue({
             const ctx = canvas.getContext('2d');
             canvas.width = width;
             canvas.height = height;
-            
+
             if (this.extremePerformanceMode) {
                 const tempCanvas = document.createElement('canvas');
                 const tempCtx = tempCanvas.getContext('2d');
@@ -1150,7 +1150,7 @@ new Vue({
             } else {
                 ctx.drawImage(img, 0, 0, width, height);
             }
-            
+
             return canvas.toDataURL();
         },
         lowerCanvasResolution() {
@@ -1177,7 +1177,7 @@ new Vue({
             const navigator = window.navigator;
             const hardwareConcurrency = navigator.hardwareConcurrency || 2;
             const deviceMemory = navigator.deviceMemory || 2;
-            
+
             return hardwareConcurrency <= 2 || deviceMemory <= 2;
         },
         exportData() {
@@ -1192,7 +1192,7 @@ new Vue({
                 backgroundMode: this.backgroundMode
             };
             const dataStr = JSON.stringify(data);
-            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
             const exportFileDefaultName = 'yuujin_player_data.json';
 
             const linkElement = document.createElement('a');
@@ -1218,7 +1218,7 @@ new Vue({
                         this.extremePerformanceMode = data.extremePerformanceMode || false;
                         this.backgroundEffects = data.backgroundEffects !== undefined ? data.backgroundEffects : true;
                         this.backgroundMode = data.backgroundMode || 1;
-                        
+
                         this.applyPerformanceMode();
                         this.initEqualizer();
                         if (this.currentTrackIndex >= 0 && this.currentTrackIndex < this.playlist.length) {
@@ -1238,12 +1238,12 @@ new Vue({
                 this.playlist = [];
                 this.currentTrackIndex = -1;
                 this.volume = 100;
-                this.equalizerBands = this.equalizerBands.map(band => ({ ...band, gain: 0 }));
+                this.equalizerBands = this.equalizerBands.map(band => ({...band, gain: 0}));
                 this.performanceMode = false;
                 this.extremePerformanceMode = false;
                 this.backgroundEffects = true;
                 this.backgroundMode = 1;
-                
+
                 this.applyPerformanceMode();
                 this.initEqualizer();
                 this.audio.pause();
@@ -1269,50 +1269,50 @@ new Vue({
         },
         toggleDesktopLyrics() {
             if (this.desktopLyricsEnabled) {
-              this.hideDesktopLyrics();
+                this.hideDesktopLyrics();
             } else {
-              this.showDesktopLyrics();
+                this.showDesktopLyrics();
             }
-          },
-        
-          showDesktopLyrics() {
-            if (window.pywebview) {
-              window.pywebview.api.show_desktop_lyrics(this.currentLyric)
-                .then(response => {
-                  console.log('Desktop lyrics shown:', response);
-                  this.desktopLyricsEnabled = true;
-                })
-                .catch(error => {
-                  console.error('Error showing desktop lyrics:', error);
-                  this.desktopLyricsEnabled = false;
-                });
-            } else {
-              console.warn('pywebview is not available. Desktop lyrics cannot be shown.');
-              this.desktopLyricsEnabled = false;
-            }
-          },
-        
-          hideDesktopLyrics() {
-            if (window.pywebview) {
-              window.pywebview.api.show_desktop_lyrics('')
-                .then(() => {
-                  this.desktopLyricsEnabled = false;
-                })
-                .catch(error => {
-                  console.error('Error hiding desktop lyrics:', error);
-                });
-            }
-          },
+        },
 
-          adjustTransparency() {
+        showDesktopLyrics() {
+            if (window.pywebview) {
+                window.pywebview.api.show_desktop_lyrics(this.currentLyric)
+                    .then(response => {
+                        console.log('Desktop lyrics shown:', response);
+                        this.desktopLyricsEnabled = true;
+                    })
+                    .catch(error => {
+                        console.error('Error showing desktop lyrics:', error);
+                        this.desktopLyricsEnabled = false;
+                    });
+            } else {
+                console.warn('pywebview is not available. Desktop lyrics cannot be shown.');
+                this.desktopLyricsEnabled = false;
+            }
+        },
+
+        hideDesktopLyrics() {
+            if (window.pywebview) {
+                window.pywebview.api.show_desktop_lyrics('')
+                    .then(() => {
+                        this.desktopLyricsEnabled = false;
+                    })
+                    .catch(error => {
+                        console.error('Error hiding desktop lyrics:', error);
+                    });
+            }
+        },
+
+        adjustTransparency() {
             const root = document.documentElement;
             const opacity = this.isDarkMode ? '0.7' : '0.5';
             root.style.setProperty('--bg-opacity', opacity);
         },
-        
+
         toggleBackgroundMode() {
             this.backgroundMode = this.backgroundMode === 1 ? 2 : 1;
-            
+
             // Update the visualization
             if (this.backgroundMode === 2 && this.isPlaying) {
                 this.setupBarVisualizer();
@@ -1320,17 +1320,17 @@ new Vue({
                 this.stopBarVisualizer();
             }
         },
-        
+
         setupBarVisualizer() {
             const canvas = document.getElementById('barVisualizer');
             if (!canvas) return;
-            
+
             canvas.style.display = 'block';
-            
+
             if (!this.audioContext) {
                 this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
             }
-            
+
             // If we're already connected to an analyzer, don't create a new one
             if (!this.barAnalyser) {
                 this.barAnalyser = this.audioContext.createAnalyser();
@@ -1338,27 +1338,27 @@ new Vue({
                 source.connect(this.barAnalyser);
                 this.barAnalyser.connect(this.audioContext.destination);
             }
-            
+
             this.barAnalyser.fftSize = 256;
             const bufferLength = this.barAnalyser.frequencyBinCount;
             const dataArray = new Uint8Array(bufferLength);
-            
+
             const ctx = canvas.getContext('2d');
             const width = canvas.width = window.innerWidth;
             const height = canvas.height = window.innerHeight;
-            
+
             // Set barVisualizerActive to true to start the animation
             this.barVisualizerActive = true;
-            
+
             const renderFrame = () => {
                 if (!this.barVisualizerActive) return;
-                
+
                 requestAnimationFrame(renderFrame);
-                
+
                 this.barAnalyser.getByteFrequencyData(dataArray);
-                
+
                 ctx.clearRect(0, 0, width, height);
-                
+
                 // Create gradient background
                 const gradient = ctx.createLinearGradient(0, 0, 0, height);
                 if (this.isDarkMode) {
@@ -1368,17 +1368,17 @@ new Vue({
                     gradient.addColorStop(0, 'rgba(200, 220, 255, 0.8)');
                     gradient.addColorStop(1, 'rgba(230, 240, 255, 0.8)');
                 }
-                
+
                 ctx.fillStyle = gradient;
                 ctx.fillRect(0, 0, width, height);
-                
+
                 // Draw bars
                 const barWidth = (width / bufferLength) * 2.5;
                 let x = 0;
-                
+
                 for (let i = 0; i < bufferLength; i++) {
                     const barHeight = (dataArray[i] / 255) * height * 0.8;
-                    
+
                     // Create gradient for bars
                     const barGradient = ctx.createLinearGradient(0, height - barHeight, 0, height);
                     if (this.isDarkMode) {
@@ -1388,19 +1388,19 @@ new Vue({
                         barGradient.addColorStop(0, '#0071e3');
                         barGradient.addColorStop(1, '#0a84ff');
                     }
-                    
+
                     ctx.fillStyle = barGradient;
                     ctx.fillRect(x, height - barHeight, barWidth, barHeight);
-                    
+
                     x += barWidth + 1;
                 }
             };
-            
+
             renderFrame();
 
-            
+
         },
-        
+
         stopBarVisualizer() {
             this.barVisualizerActive = false;
             const canvas = document.getElementById('barVisualizer');
@@ -1412,7 +1412,7 @@ new Vue({
     mounted() {
         this.audio.addEventListener('timeupdate', this.updateProgress);
         this.audio.addEventListener('ended', this.playNext);
-        
+
         this.audio.addEventListener('error', (e) => {
             console.error("Audio error:", e);
         });
@@ -1437,7 +1437,7 @@ new Vue({
             if (this.backgroundMode === 2 && this.barVisualizerActive) {
                 this.setupBarVisualizer();
             }
-            
+
             if (window.innerWidth >= 768 && !this.sidebarOpen) {
                 this.sidebarOpen = true;
             } else if (window.innerWidth < 768 && this.sidebarOpen) {
@@ -1481,6 +1481,26 @@ new Vue({
             }
             this.applyPerformanceMode();
         }
+        fetch('./resources/しほ - birthday eve(SHIHO).mp3').then(res => {
+            res.blob().then(blob => {
+                // 核心：从URL截文件名 + 从响应头取类型，无任何多余判断
+                // const name = new URL('./resources/しほ - birthday eve(SHIHO).mp3').pathname.split('/').pop() || 'file';
+                const file = new File([blob], 'しほ - birthday eve(SHIHO).mp3', {type: blob.type});
+                this.addTrackToPlaylist(file).then(r => {
+                    fetch('./resources/しほ - birthday eve(SHIHO).lrc').then(res => {
+                        res.text().then(text => {
+                            this.lyrics = this.parseLRC(text);
+                            this.currentView = 'lyrics'
+                            this.volume = 10
+                            this.togglePlay()
+                        })
+                    });
+
+                });
+            })
+        });
+
+
     },
     updated() {
         this.updateFeatherIcons();
@@ -1497,11 +1517,11 @@ new Vue({
         if (this.resizeObserver) {
             this.resizeObserver.disconnect();
         }
-        if (this.audioContext) {    
+        if (this.audioContext) {
             this.audioContext.close();
         }
         document.removeEventListener('click', this.handleOutsideClick);
-        
+
         this.stopBarVisualizer();
     }
 });

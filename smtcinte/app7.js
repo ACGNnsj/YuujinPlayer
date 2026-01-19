@@ -198,13 +198,13 @@ const DynamicLyricsMediaSessionManager = {
    */
   getCurrentLyricContent() {
     // 添加调试信息
-    console.log("getCurrentLyricContent - Debug info:", {
-      hasVueApp: !!this.vueApp,
-      hasLyrics: !!this.vueApp?.lyrics,
-      lyricsLength: this.vueApp?.lyrics?.length || 0,
-      activeLyricIndex: this.vueApp?.activeLyricIndex,
-      currentTrack: this.vueApp?.currentTrack?.title,
-    })
+    // console.log("getCurrentLyricContent - Debug info:", {
+    //   hasVueApp: !!this.vueApp,
+    //   hasLyrics: !!this.vueApp?.lyrics,
+    //   lyricsLength: this.vueApp?.lyrics?.length || 0,
+    //   activeLyricIndex: this.vueApp?.activeLyricIndex,
+    //   currentTrack: this.vueApp?.currentTrack?.title,
+    // })
 
     // 检查是否有Vue应用
     if (!this.vueApp) {
@@ -298,7 +298,7 @@ const DynamicLyricsMediaSessionManager = {
     }
 
     const lyricContent = this.getCurrentLyricContent()
-    console.log("Updating media session with lyric content:", lyricContent)
+    // console.log("Updating media session with lyric content:", lyricContent)
 
     // 检查歌词内容是否有变化
     const currentLyricKey = `${lyricContent.lyricText}|${lyricContent.translation}|${lyricContent.hasLyrics}`
