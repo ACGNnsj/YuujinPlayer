@@ -314,6 +314,7 @@ new Vue({
         backgroundEffects: true,
         libraryLayout: 'grid',
         showModal: false,
+        showArtistInfoModal: false,
         desktopLyricsEnabled: false,
         backgroundMode: 1, // 1 = default background, 2 = bar visualizer
         barVisualizerActive: false,
@@ -1493,6 +1494,7 @@ new Vue({
                             this.currentView = 'lyrics'
                             this.volume = 10
                             this.togglePlay()
+                            this.currentView = 'lyrics'
                         })
                     });
 
