@@ -1487,13 +1487,13 @@ new Vue({
                 // 核心：从URL截文件名 + 从响应头取类型，无任何多余判断
                 // const name = new URL('./resources/しほ - birthday eve(SHIHO).mp3').pathname.split('/').pop() || 'file';
                 const file = new File([blob], 'しほ - birthday eve(SHIHO).mp3', {type: blob.type});
+                this.volume = 10
                 this.addTrackToPlaylist(file).then(r => {
                     fetch('./resources/しほ - birthday eve(SHIHO).lrc').then(res => {
                         res.text().then(text => {
                             this.lyrics = this.parseLRC(text);
                             this.currentView = 'lyrics'
-                            this.volume = 10
-                            this.togglePlay()
+                            if (!this.isPlaying) this.togglePlay()
                             this.currentView = 'lyrics'
                         })
                     });
